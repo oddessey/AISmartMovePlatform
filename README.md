@@ -163,63 +163,34 @@ smartmove-ai/
 ### 9. 시작하기
 
 #### 사전 요구사항
-- Java 17, Node.js 20+, Python 3.11, Docker
+- Docker Desktop (Docker Compose 포함), Node.js 20+, npm
 
 #### 1. 클론 및 실행
 ```bash
-git clone https://github.com/your-org/AISmartMovePlatform.git
-cd smartmove-ai
+git clone https://github.com/oddessey/AISmartMovePlatform.git
+cd AISmartMovePlatform
 
-# 전체 인프라 실행 (Postgres, Redis, AI Server)
-docker-compose up -d
+# 환경 변수 파일 생성 (최초 1회)
+cp .env.example .env
 
-# Backend 실행
-cd backend
-./gradlew bootRun
+# PostgreSQL, Redis, AI 서버, Spring Boot 백엔드 실행
+docker compose up --build -d
 
-# Frontend 실행 (새 터미널)
+# 프론트엔드 실행 (새 터미널)
 cd frontend
 npm install
 npm run dev
-
-# AI Server 실행 (새 터미널) - Docker 안 쓸 경우
-cd ai-server
-pip install -r requirements.txt
-uvicorn app.main:app --reload --port 8000
 ```
 
 - Frontend: http://localhost:5173
-- Backend API Docs: http://localhost:8080/swagger-ui.html
+- Backend API Docs: http://localhost:8080/swagger-ui/index.html
 - AI Server Docs: http://localhost:8000/docs
 
 ### 10. 환경 변수 설정
 
-#### `backend/src/main/resources/application.yml`
-```yaml
-spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/smartmove
-    username: postgres
-    password: ${DB_PASSWORD}
-  data:
-    redis:
-      host: localhost
-      port: 6379
-ai:
-  server:
-    url: http://localhost:8000
-s3:
-  bucket: smartmove-images
-  access-key: ${S3_ACCESS_KEY}
-jwt:
-  secret: ${JWT_SECRET}
-```
-
-#### `ai-server/.env`
-```
-OPENAI_API_KEY=sk-proj-...
-YOLO_MODEL_PATH=./models/best_appliance_v3.pt
-```
+프로젝트 루트의 `.env.example`을 `.env`로 복사해 사용합니다. `.env`는 Git에서 제외됩니다.
+`DB_PASSWORD`는 Compose의 PostgreSQL 비밀번호(`postgres`)와 동일하게 설정하세요.
+배포 환경에서는 반드시 `JWT_SECRET`을 안전한 값으로 교체하세요.
 
 ### 11. API 명세
 
@@ -263,20 +234,3 @@ YOLO_MODEL_PATH=./models/best_appliance_v3.pt
 > - [ ] v2.0: AR 설치 가이드, IoT 가전 연동으로 설치 후 자동 시운전 체크
 
 ---
-
-### 👨‍💻  실행 방법
-Bash
-1. 환경변수 복사
-cp .env.example .env  # OPENAI_API_KEY 넣기
-
-2. 전체 실행
-docker-compose up -d
-
-3. 프론트 실행
-cd frontend && npm install && npm run dev
-
-프론트: http://localhost:5173
-
-백엔드 Swagger: http://localhost:8080/swagger-ui.html
-
-AI 서버 Docs: http://localhost:8000/docs
