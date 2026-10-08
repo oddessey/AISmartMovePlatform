@@ -264,8 +264,17 @@ YOLO_MODEL_PATH=./models/best_appliance_v3.pt
 
 ---
 
-### 👨‍💻 기여 및 문의
+### 👨‍💻  실행 방법
+Bash
+1. 환경변수 복사
+cp .env.example .env  # OPENAI_API_KEY 넣기
 
-이슈와 PR은 언제나 환영입니다. `main` 브랜치로 PR을 보내주세요.
+2. 전체 실행
+docker-compose up -d
 
-**문의:** your-email@example.com
+3. 프론트 실행
+cd frontend && npm install && npm run dev
+
+프론트: http://localhost:5173
+백엔드 Swagger: http://localhost:8080/swagger-ui.html
+AI 서버 Docs: http://localhost:8000/docs
