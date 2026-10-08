@@ -276,5 +276,7 @@ docker-compose up -d
 cd frontend && npm install && npm run dev
 
 프론트: http://localhost:5173
+
 백엔드 Swagger: http://localhost:8080/swagger-ui.html
+
 AI 서버 Docs: http://localhost:8000/docs
