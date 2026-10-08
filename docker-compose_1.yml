@@ -1,0 +1,55 @@
+
+version: '3.8'
+services:
+  postgres:
+    image: postgis/postgis:16-3.4
+    container_name: smartmove-postgres
+    restart: always
+    environment:
+      POSTGRES_DB: smartmove
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: smartmove-redis
+    ports:
+      - "6379:6379"
+
+  ai-server:
+    build: ./ai-server
+    container_name: smartmove-ai
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    volumes:
+      - ./ai-server/app:/app/app
+    depends_on:
+      - postgres
+
+  backend:
+    build: ./backend
+    container_name: smartmove-backend
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      ai-server:
+        condition: service_started
+
+volumes:
+  pgdata:

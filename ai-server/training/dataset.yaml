@@ -1,0 +1,21 @@
+
+# YOLOv8 Dataset Config for Appliance Detection
+path: ./datasets/appliance
+train: images/train
+val: images/val
+test: images/test
+
+nc: 8
+names:
+  0: aircon_indoor_wall
+  1: aircon_indoor_stand
+  2: aircon_outdoor
+  3: washer
+  4: fridge
+  5: tv
+  6: pipe
+  7: bracket
+
+# 추가 클래스 (불량 탐지용)
+# 8: pipe_taping_bad
+# 9: outdoor_tilt
